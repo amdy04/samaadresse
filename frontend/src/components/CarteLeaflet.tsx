@@ -33,18 +33,29 @@ export const CarteLeaflet: React.FC<CarteLeafletProps> = ({
 
     // Initialisation de la carte Leaflet
     if (!mapInstanceRef.current) {
-      const map = L.map(mapContainerRef.current).setView(centre, zoom);
+      const map = L.map(mapContainerRef.current, {
+        zoomControl: true,
+        scrollWheelZoom: true
+      }).setView(centre, zoom);
 
       // Fond de carte OpenStreetMap
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> UASZ',
+        attribution: '&copy; OpenStreetMap UASZ',
         maxZoom: 19
       }).addTo(map);
 
       markersLayerRef.current = L.layerGroup().addTo(map);
       mapInstanceRef.current = map;
+
+      // Redimensionnement automatique pour éviter les tuiles grises
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 250);
     } else {
       mapInstanceRef.current.setView(centre, zoom);
+      setTimeout(() => {
+        mapInstanceRef.current?.invalidateSize();
+      }, 200);
     }
   }, [centre, zoom]);
 
@@ -71,7 +82,7 @@ export const CarteLeaflet: React.FC<CarteLeafletProps> = ({
     adresses.forEach((adr) => {
       const isSelected = adresseSelectionnee?.codeSamaAdresse === adr.codeSamaAdresse;
       const markerHtml = `
-        <div style="background-color: ${isSelected ? '#dc2626' : '#15803d'}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 4px; white-space: nowrap;">
+        <div style="background-color: ${isSelected ? '#dc2626' : '#059669'}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 4px; white-space: nowrap; cursor: pointer;">
           <span>📍</span> ${adr.codeSamaAdresse}
         </div>
       `;
