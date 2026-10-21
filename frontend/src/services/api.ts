@@ -1,7 +1,7 @@
 import { Adresse, ItineraireResult, Quartier, UserProfile } from '../types';
 import { offlineStorage } from './offlineStorage';
 
-const BASE_URL = '/api/v1';
+const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 const TOKEN_KEY = 'samaadresse_jwt_token';
 
 // Référentiel de secours en direct (garantit le zéro échec en démo)
