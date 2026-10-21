@@ -14,7 +14,11 @@ import java.util.Optional;
 @Repository
 public interface AdresseRepository extends JpaRepository<Adresse, Long> {
 
-    Optional<Adresse> findByCodeSamaAdresse(String codeSamaAdresse);
+    Optional<Adresse> findByCodeSamaAdresseIgnoreCase(String codeSamaAdresse);
+
+    default Optional<Adresse> findByCodeSamaAdresse(String codeSamaAdresse) {
+        return findByCodeSamaAdresseIgnoreCase(codeSamaAdresse != null ? codeSamaAdresse.trim() : null);
+    }
 
     List<Adresse> findByUtilisateurIdOrderByDateCreationDesc(Long utilisateurId);
 

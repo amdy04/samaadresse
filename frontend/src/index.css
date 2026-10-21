@@ -11,6 +11,7 @@ body {
   background-color: #f8fafc;
   color: #0f172a;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Fix z-index pour Leaflet sur mobile */
@@ -21,7 +22,16 @@ body {
   z-index: 20 !important;
 }
 
-/* Animations simples */
+/* Masquer la scrollbar tout en permettant le défilement */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
@@ -31,13 +41,13 @@ body {
   animation: fadeIn 0.25s ease-out forwards;
 }
 
-/* Pulse discret pour le bouton GPS */
+/* Animation douce pour la capture GPS */
 @keyframes pulseGps {
   0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 0.85; }
+  50% { transform: scale(1.04); opacity: 0.9; }
   100% { transform: scale(1); opacity: 1; }
 }
 
 .gps-pulse {
-  animation: pulseGps 2s infinite ease-in-out;
+  animation: pulseGps 1.8s infinite ease-in-out;
 }

@@ -8,6 +8,7 @@ import { FicheAdresseModal } from './components/FicheAdresseModal';
 import { QrCodeModal } from './components/QrCodeModal';
 import { Adresse, ItineraireResult } from './types';
 import { api } from './services/api';
+import { Map, Search, PlusCircle, Bookmark, Shield } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [pageActive, setPageActive] = useState('home');
@@ -37,11 +38,13 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-between antialiased">
       <div>
+        {/* Top Navbar */}
         <Navbar pageActive={pageActive} setPageActive={setPageActive} />
 
-        <main className="max-w-4xl mx-auto px-4 pt-4 sm:pt-6">
+        {/* Contenu principal */}
+        <main className="max-w-4xl mx-auto px-4 pt-4 sm:pt-6 pb-24">
           {pageActive === 'home' && (
             <HomePage
               onOpenFiche={(adr) => setFicheAdresse(adr)}
@@ -74,32 +77,93 @@ export const App: React.FC = () => {
           )}
 
           {pageActive === 'admin' && (
-            <div className="bg-white rounded-3xl p-6 border border-slate-200 text-center space-y-3">
-              <div className="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">
+            <div className="bg-white rounded-3xl p-6 border border-slate-200 text-center space-y-4 max-w-lg mx-auto shadow-xs">
+              <div className="w-14 h-14 bg-emerald-100 text-emerald-800 rounded-3xl flex items-center justify-center mx-auto text-2xl font-bold">
                 🛡️
               </div>
-              <h2 className="text-lg font-bold text-slate-900">Espace Administration & Modération</h2>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
-                Surveillance de la grille spatiale de Ziguinchor, validation des signalements et audit des codes générés.
-              </p>
-              <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto pt-2 text-xs">
-                <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                  <div className="text-xl font-black text-emerald-700">8</div>
-                  <div className="text-[11px] text-slate-500">Quartiers</div>
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">Administration & Gouvernance UASZ</h2>
+                <p className="text-xs text-slate-500 mt-1">
+                  Surveillance de la grille spatiale de Ziguinchor et modération des adresses signalées.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 pt-2 text-xs">
+                <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                  <div className="text-2xl font-black text-emerald-700">8</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Quartiers</div>
                 </div>
-                <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                  <div className="text-xl font-black text-emerald-700">0</div>
-                  <div className="text-[11px] text-slate-500">Signalements</div>
+                <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                  <div className="text-2xl font-black text-emerald-700">0</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Litiges</div>
                 </div>
-                <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                  <div className="text-xl font-black text-emerald-700">100%</div>
-                  <div className="text-[11px] text-slate-500">Conformité</div>
+                <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                  <div className="text-2xl font-black text-emerald-700">100%</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 font-medium">Conformité</div>
                 </div>
               </div>
             </div>
           )}
         </main>
       </div>
+
+      {/* Barre de navigation mobile Native-Like (Fixée en bas) */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg">
+        <div className="max-w-md mx-auto flex items-center justify-around h-16 px-2">
+          
+          <button
+            onClick={() => setPageActive('home')}
+            className={`flex flex-col items-center gap-1 text-[11px] font-bold py-1 px-3 rounded-2xl transition ${
+              pageActive === 'home' ? 'text-emerald-700 scale-105' : 'text-slate-400 hover:text-slate-700'
+            }`}
+          >
+            <Map className="w-5 h-5" />
+            <span>Carte</span>
+          </button>
+
+          <button
+            onClick={() => setPageActive('annuaire')}
+            className={`flex flex-col items-center gap-1 text-[11px] font-bold py-1 px-3 rounded-2xl transition ${
+              pageActive === 'annuaire' ? 'text-emerald-700 scale-105' : 'text-slate-400 hover:text-slate-700'
+            }`}
+          >
+            <Search className="w-5 h-5" />
+            <span>Annuaire</span>
+          </button>
+
+          {/* Bouton central flottant Créer */}
+          <button
+            onClick={() => setPageActive('creer')}
+            className="flex flex-col items-center -mt-5 group"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-600/40 group-active:scale-95 transition-transform">
+              <PlusCircle className="w-6 h-6 stroke-[2.5]" />
+            </div>
+            <span className="text-[10px] font-bold text-slate-700 mt-1">Créer</span>
+          </button>
+
+          <button
+            onClick={() => setPageActive('mes-adresses')}
+            className={`flex flex-col items-center gap-1 text-[11px] font-bold py-1 px-3 rounded-2xl transition ${
+              pageActive === 'mes-adresses' ? 'text-emerald-700 scale-105' : 'text-slate-400 hover:text-slate-700'
+            }`}
+          >
+            <Bookmark className="w-5 h-5" />
+            <span>Mes adresses</span>
+          </button>
+
+          <button
+            onClick={() => setPageActive('admin')}
+            className={`flex flex-col items-center gap-1 text-[11px] font-bold py-1 px-3 rounded-2xl transition ${
+              pageActive === 'admin' ? 'text-emerald-700 scale-105' : 'text-slate-400 hover:text-slate-700'
+            }`}
+          >
+            <Shield className="w-5 h-5" />
+            <span>Admin</span>
+          </button>
+
+        </div>
+      </nav>
 
       {/* Modals globales */}
       {ficheAdresse && (
@@ -117,14 +181,6 @@ export const App: React.FC = () => {
           onClose={() => setQrAdresse(null)}
         />
       )}
-
-      {/* Footer Institutionnel UASZ */}
-      <footer className="border-t border-slate-200 py-6 text-center text-xs text-slate-400 bg-white">
-        <div className="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>Université Assane Seck de Ziguinchor · Licence 3 Ingénierie Informatique</span>
-          <span className="font-semibold text-slate-500">Projet 12 : SamaAdresse (2025-2026)</span>
-        </div>
-      </footer>
     </div>
   );
 };

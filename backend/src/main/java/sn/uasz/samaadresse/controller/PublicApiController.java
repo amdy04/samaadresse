@@ -3,6 +3,7 @@ package sn.uasz.samaadresse.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.uasz.samaadresse.domain.TypeLieu;
@@ -36,9 +37,14 @@ public class PublicApiController {
 
     @GetMapping("/resolve/{code}")
     @Operation(summary = "Résoudre un code SamaAdresse en coordonnées GPS, photo et repères")
-    public ResponseEntity<ResolutionResponseDTO> resoudreCode(@PathVariable String code) {
-        ResolutionResponseDTO dto = adresseService.resoudreAdresse(code.toUpperCase());
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<?> resoudreCode(@PathVariable String code) {
+        try {
+            ResolutionResponseDTO dto = adresseService.resoudreAdresse(code.trim().toUpperCase());
+            return ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", e.getMessage(), "code", code));
+        }
     }
 
     @GetMapping("/search")
